@@ -22,10 +22,10 @@ How to play
 In game: Esc or F1 opens the menu (save states, Insert coin, Player 2 joins, Reset, Quit).
 P, O and -/= stop, step and slow the game. Everything is remappable in the launcher.
 
-The port runs the game exactly as the board does. The cheats and the training mode the sibling
-cps2recomp ports have (free play, no damage, infinite time, one-hit knockouts, full meters, an input
-display and a Training session) are not built yet: they wait on addresses found on the running board.
-See the project's ROADMAP.md.
+The port runs the game exactly as the board does until you switch a feature on. The game's own features
+are in: free play, no damage for either player, infinite time, one-hit knockouts, an input display and a
+Training session (health held full, the clock standing, with a readout). This game has no SUPER meter
+(Turbo added it, the year after), so there is no "full meter" here. See the project's ROADMAP.md.
 
 
 What is in here
@@ -43,5 +43,5 @@ Keep the .exe and .dll files together in one folder. Save states, settings and t
 eprom are kept beside them (or wherever you run the game from).
 
 The port is GPL-3.0; its source, and how it was made, are at
-https://github.com/omegakatana92/Super-Street-Fighter-II-Recomp
+https://github.com/omegakatana92/Super-Street-Fighter-II-The-New-Challengers-Recomp
 You can also build it yourself from that source. To play, you still need your own ROM set.

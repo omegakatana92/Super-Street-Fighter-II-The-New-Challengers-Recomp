@@ -21,17 +21,21 @@ From the toolkit, with no game work:
 - **Run-ahead** and the **Display** options (scaling, picture shape, window size, full screen).
 - Every key and button **remappable**, for each player.
 
-The game's own features are **not built yet**: none of the game's memory has been found, so the port
-has nothing game-specific in `games/ssf2/src/` and `--list-features` shows only the toolkit's own.
+The game's own features are **partly built**: the foundation (credits, the round's clock and the two
+players' records — their health, the drawn copy of it and their places across the stage) has been found
+and is named in `games/ssf2/src/ssf2.h`, and the Features page (free play and the cheats) and the first
+of the training aids (the input display and the Training mode session) are in
+`games/ssf2/src/`. How each address was found is in [PROGRESS.md](games/ssf2/PROGRESS.md).
 
 ## What a finished port adds (this is the work)
 
 ### 0. Foundation — know the game's memory
 
-The credits, the round's clock and the two players' records have to be found and named in
-`games/ssf2/src/ssf2.h`: the health (and what the bar is drawn from), the place across the stage, the
-facing, the state word (standing, walking, crouching, in the air, attacking, reeling), and the value
-behind the super meter. This is the starting point for everything else.
+The credits, the round's clock and the two players' records have been found and named in
+`games/ssf2/src/ssf2.h`: the health (and what the bar is drawn from), the place across the stage and the
+height above the floor. Still to find: the facing (taken from the two places for now), the state word
+(standing, walking, crouching, in the air, attacking, reeling), and the attack boxes. This is the
+starting point for everything else, and [PROGRESS.md](games/ssf2/PROGRESS.md) says how each was found.
 
 How the toolkit finds these (all in `docs/FEATURES.md`):
 
@@ -48,11 +52,11 @@ How the toolkit finds these (all in `docs/FEATURES.md`):
 
 | Feature | Kind | Built | Needs |
 | --- | --- | --- | --- |
-| `free_play` | on/off | no | the credits word |
-| `no_damage`, `no_damage_2` | on/off | no | each player's health and the round's full value |
-| `infinite_time` | on/off | no | the round's clock |
-| `one_hit` | on/off | no | the opponent's health |
-| `full_gauge` | on/off | no | the value behind each player's super meter |
+| `free_play` | on/off | yes | the credits word (`FF82E9`) |
+| `no_damage`, `no_damage_2` | on/off | yes | each player's health and the round's full value |
+| `infinite_time` | on/off | yes | the round's clock (`FF8CCE`) |
+| `one_hit` | on/off | yes | the opponent's health |
+| `full_gauge` | on/off | n/a | *this game has no SUPER meter* (Turbo added it, the year after) |
 | Board/operator settings (difficulty, round time, free play) | choices | no | reading the EEPROM's operator settings |
 | "The game's own test menu" | command | no | a routine address to jump to |
 
@@ -60,11 +64,11 @@ How the toolkit finds these (all in `docs/FEATURES.md`):
 
 | Piece | What it adds | Built | Needs |
 | --- | --- | --- | --- |
-| Input display | what the stick holds, and for how long | no | each player's facing, so the notation turns to their side |
-| Training mode | health and meter held full, the clock standing, and a readout | no | the health, the clock and the meter |
+| Input display | what the stick holds, and for how long | yes | each player's facing (taken from the two places across the stage) |
+| Training mode | health held full, the clock standing, and a readout | yes | the health and the clock |
 | Frame data | startup, active, recovery, and the advantage after a hit | no | the state that says a move is out, per player |
 | Combo readout | hits, damage, and what of it comes back | no | the damage rule (a rewrite) |
-| The dummy (player 2) | stand, crouch, jump, guard, record and replay | no | the game's idea of a round and of guarding |
+| The dummy (player 2) | stand, crouch, jump, guard, record and replay | no | the game's idea of a round and of guarding, and the state word |
 | Hit boxes | the players' and projectiles' boxes, drawn on the picture | no | the box tables and the camera's place |
 
 The toolkit's `fight/` parts (`fight/fight.h`) give the framework; the input display and the Training
@@ -91,9 +95,11 @@ mode and the widescreen possible, and it is the part most worth doing carefully.
 
 ## Recommended order
 
-1. **The foundation** — the game's memory (credits, clock, the two player records).
-2. **The Features page** — free play, then the cheats.
-3. **Training mode** — the input display and the Training mode session, then the rest.
+1. **The foundation** — done for the credits, the round's clock and the players' health and places; the
+   state word is the next thing to find.
+2. **The Features page** — done: free play and the cheats (no `full_gauge`; the game has no meter).
+3. **Training mode** — the input display and the Training mode session are in; the rest (frame data, the
+   combo readout, the dummy, the hit boxes) wait on the state word and the attack boxes.
 4. **Readable rewrites** — needed by 3 and 5, and correctness.
 5. **Widescreen.**
 6. **Alternative modes.**
